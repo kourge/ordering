@@ -1,0 +1,44 @@
+{
+  "name": "ordering",
+  "version": "0.0.1",
+  "description": "A set of comparator functions, as well as tools for manipulating, projecting, and combining them",
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "scripts": {
+    "typings": "typings",
+    "pretest": "typings install",
+    "test": "mocha --require ts-node/register ./spec/*.spec.ts",
+    "prebuild": "rm -rf lib && typings install",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kourge/ordering.git"
+  },
+  "keywords": [
+    "sort",
+    "sorting function",
+    "comparator",
+    "comparison function",
+    "utility"
+  ],
+  "author": {
+    "name": "Wil Lee",
+    "email": "kourge@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kourge/ordering/issues"
+  },
+  "homepage": "https://github.com/kourge/ordering#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.2",
+    "ts-node": "^0.7.3",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  },
+  "dependencies": {
+    "object-assign": "^4.1.0"
+  }
+}
