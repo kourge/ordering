@@ -35,5 +35,5 @@ node_modules
 # TypeScript type definitions
 typings
 
-# Compilation results
-lib
+# TypeScript source files
+src
