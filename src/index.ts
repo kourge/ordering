@@ -88,19 +88,23 @@ export function byNumber(a: number, b: number): number {
   return a - b;
 }
 
+export interface StringOrdering extends Ordering<string> {
+  /**
+   * An ordering that compares strings lexicographically according to the current
+   * locale's collation, but does so while ignoring case as defined by the corrent
+   * locale.
+   */
+  caseInsensitive: Ordering<string>;
+}
+
 /**
- * An ordering that compares strings lexicographically according to the
- * current locale's collation.
+ * An ordering that compares strings lexicographically according to the current
+ * locale's collation.
  */
-export const byString = assign(
+export const byString: StringOrdering = assign(
   function byString(a: string, b: string): number {
     return a.localeCompare(b);
   }, {
-    /**
-     * An ordering that compares strings lexicographically according to the
-     * current locale's collation, but does so while ignoring case as defined
-     * by the corrent locale.
-     */
     caseInsensitive(a: string, b: string): number {
       return a.localeCompare(b, 'en-US', {sensitivity: 'base'});
     }
