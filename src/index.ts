@@ -115,9 +115,9 @@ export const byString: StringOrdering = assign(
  * An ordering that compares dates by chronological order. An earlier date is
  * considered smaller than a later one.
  */
-export const byDate = Ordering.of(byNumber)
-  .on<Date>(date => date.getTime())
-  .ordering;
+export function byDate(a: Date, b: Date): number {
+  return +a - +b;
+}
 
 /**
  * An ordering that compares booleans by truth. Falsehood is considered smaller
