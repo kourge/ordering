@@ -9,7 +9,8 @@
     "pretest": "typings install",
     "test": "mocha --require ts-node/register ./spec/*.spec.ts",
     "prebuild": "rm -rf lib && typings install",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
