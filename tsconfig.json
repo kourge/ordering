@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "noLib": false,
+    "outDir": "lib/"
+  },
+  "files": [
+    "./typings/index.d.ts",
+    "./src/index.ts"
+  ],
+  "filesGlob": [
+    "./typings/index.d.ts",
+    "./src/index.ts",
+    "!./node_modules/**/*.ts",
+    "!./node_modules/**/*.tsx"
+  ],
+  "compileOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
