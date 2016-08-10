@@ -38,8 +38,5 @@
     "ts-node": "^0.7.3",
     "typescript": "^1.8.10",
     "typings": "^1.0.4"
-  },
-  "dependencies": {
-    "object-assign": "^4.1.0"
   }
 }
