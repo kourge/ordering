@@ -1,4 +1,3 @@
-import assign = require('object-assign');
 
 /**
  * An `Ordering<T>` can compare two items of type `T`. A return value of 0 means
@@ -88,28 +87,24 @@ export function byNumber(a: number, b: number): number {
   return a - b;
 }
 
-export interface StringOrdering extends Ordering<string> {
+/**
+ * An ordering that compares strings lexicographically according to the current
+ * locale's collation.
+ */
+export function byString(a: string, b: string): number {
+  return a.localeCompare(b);
+}
+
+export namespace byString {
   /**
    * An ordering that compares strings lexicographically according to the current
    * locale's collation, but does so while ignoring case as defined by the corrent
    * locale.
    */
-  caseInsensitive: Ordering<string>;
-}
-
-/**
- * An ordering that compares strings lexicographically according to the current
- * locale's collation.
- */
-export const byString: StringOrdering = assign(
-  function byString(a: string, b: string): number {
-    return a.localeCompare(b);
-  }, {
-    caseInsensitive(a: string, b: string): number {
-      return a.localeCompare(b, 'en-US', {sensitivity: 'base'});
-    }
+  export function caseInsensitive(a: string, b: string): number {
+    return a.localeCompare(b, 'en-US', {sensitivity: 'base'});
   }
-);
+}
 
 /**
  * An ordering that compares dates by chronological order. An earlier date is
