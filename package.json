@@ -1,6 +1,6 @@
 {
   "name": "@kourge/ordering",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A set of comparator functions, as well as tools for manipulating, projecting, and combining them",
   "main": "lib/index.js",
   "typings": "lib/index",
