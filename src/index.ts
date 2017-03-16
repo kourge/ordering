@@ -16,35 +16,6 @@ export namespace Ordering {
   export function of<T>(ordering: Ordering<T>): WrappedOrdering<T> {
     return new WrappedOrdering(ordering);
   }
-
-  /**
-   * Joins zero or more existing orderings so that when a comparison results
-   * in equality, the next one is used as a fallback. If no orderings are
-   * given, the resulting ordering considers every comparison as equal.
-   */
-  export function join<T>(...orderings: Ordering<T>[]): Ordering<T> {
-    switch (orderings.length) {
-      case 0:
-        return alwaysEqual;
-      case 1:
-        return orderings[0];
-      default:
-        return function chainedOrdering(a: T, b: T): number {
-          const lastIndex = orderings.length - 1;
-          const last = orderings[lastIndex];
-          const rest = orderings.slice(0, lastIndex);
-
-          for (const compare of rest) {
-            const result = compare(a, b);
-            if (result !== 0) {
-              return result;
-            }
-          }
-
-          return last(a, b);
-        };
-    }
-  }
 }
 
 /**

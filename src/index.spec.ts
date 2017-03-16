@@ -2,39 +2,6 @@ import {expect} from 'chai';
 import {Ordering, WrappedOrdering} from './index';
 import {byNumber} from './comparator';
 
-describe('join', () => {
-  interface Thing {
-    id: number;
-    name: string;
-  }
-
-  function byId(a: Thing, b: Thing): number {
-    return a.id - b.id;
-  }
-
-  function byName(a: Thing, b: Thing): number {
-    return a.name.localeCompare(b.name);
-  }
-
-  const w: Thing = {id: 3, name: 'w'};
-  const x: Thing = {id: 3, name: 'x'};
-  const y: Thing = {id: 7, name: 'y'};
-  const z: Thing = {id: 7, name: 'z'};
-
-  it('does not alter a single ordering', () => {
-    const withoutJoin = [z, x, w, y].sort(byName);
-    const withJoin = [z, x, w, y].sort(Ordering.join(byName));
-
-    expect(withJoin).to.deep.equal(withoutJoin);
-  });
-
-  it('combines two orderings correctly', () => {
-    const result = [z, x, w, y].sort(Ordering.join(byId, byName));
-
-    expect(result).to.deep.equal([w, x, y, z]);
-  });
-});
-
 describe('WrappedOrdering', () => {
   describe('reverse', () => {
     const byNumberReversed = new WrappedOrdering(byNumber).reverse().ordering;

@@ -8,6 +8,35 @@ export interface Comparator<T> {
 }
 
 /**
+ * Joins zero or more existing comparators so that when a comparison results in
+ * equality, the next one is used as a fallback. If no comparators are given,
+ * the resulting comparator considers every comparison as equal.
+ */
+export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
+  switch (comparators.length) {
+    case 0:
+      return alwaysEqual;
+    case 1:
+      return comparators[0];
+    default:
+      return function joinedComparator(a: T, b: T): number {
+        const lastIndex = comparators.length - 1;
+        const last = comparators[lastIndex];
+        const rest = comparators.slice(0, lastIndex);
+
+        for (const compare of rest) {
+          const result = compare(a, b);
+          if (result !== 0) {
+            return result;
+          }
+        }
+
+        return last(a, b);
+      };
+  }
+}
+
+/**
  * A comparator that reports every comparison as equal.
  */
 export function alwaysEqual<T>(a: T, b: T): number {
