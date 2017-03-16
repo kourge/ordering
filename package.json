@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/kourge/ordering#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^2.5.2",
-    "ts-node": "^0.7.3",
+    "chai": "3.5.0",
+    "mocha": "3.2.0",
+    "ts-node": "2.1.0",
     "typescript": "2.2.1",
     "typings": "^1.0.4"
   }
