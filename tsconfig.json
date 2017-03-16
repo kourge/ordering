@@ -7,14 +7,13 @@
     "outDir": "lib/"
   },
   "files": [
-    "./typings/index.d.ts",
-    "./src/index.ts"
+    "./typings/index.d.ts"
   ],
-  "filesGlob": [
-    "./typings/index.d.ts",
-    "./src/index.ts",
-    "!./node_modules/**/*.ts",
-    "!./node_modules/**/*.tsx"
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ],
   "compileOnSave": false,
   "atom": {
