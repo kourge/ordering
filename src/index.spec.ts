@@ -26,6 +26,15 @@ describe('Ordering', () => {
 
       expect(result).to.deep.equal([5, 4, 3, 2, 1]);
     });
+
+    it('caches the original comparator in case of double reversal', () => {
+      const numberOrdering = ordering(byNumber);
+      const doubleReversed = numberOrdering
+        .reverse()
+        .reverse();
+
+      expect(doubleReversed.compare).to.equal(numberOrdering.compare);
+    });
   });
 
   describe('on', () => {

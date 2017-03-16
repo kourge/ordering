@@ -16,7 +16,11 @@ export class Ordering<T> {
    * Returns an ordering that is a reversal of the current one.
    */
   reverse(): Ordering<T> {
-    return new Ordering<T>((a, b) => -this.compare(a, b));
+    const reversed = new Ordering<T>((a, b) => -this.compare(a, b));
+    // Cache the current ordering as the reverse of the reversed ordering.
+    reversed.reverse = () => this;
+
+    return reversed;
   }
 
   /**
