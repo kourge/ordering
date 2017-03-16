@@ -1,3 +1,4 @@
+import {alwaysEqual} from './comparator';
 
 /**
  * An `Ordering<T>` can compare two items of type `T`. A return value of 0 means
@@ -71,53 +72,4 @@ export class WrappedOrdering<T> {
       this.ordering(f(a), f(b))
     );
   }
-}
-
-/**
- * An ordering that reports every comparison as equal.
- */
-export function alwaysEqual<T>(a: T, b: T): number {
-  return 0;
-}
-
-/**
- * An ordering that compares numbers.
- */
-export function byNumber(a: number, b: number): number {
-  return a - b;
-}
-
-/**
- * An ordering that compares strings lexicographically according to the current
- * locale's collation.
- */
-export function byString(a: string, b: string): number {
-  return a.localeCompare(b);
-}
-
-export namespace byString {
-  /**
-   * An ordering that compares strings lexicographically according to the current
-   * locale's collation, but does so while ignoring case as defined by the corrent
-   * locale.
-   */
-  export function caseInsensitive(a: string, b: string): number {
-    return a.localeCompare(b, 'en-US', {sensitivity: 'base'});
-  }
-}
-
-/**
- * An ordering that compares dates by chronological order. An earlier date is
- * considered smaller than a later one.
- */
-export function byDate(a: Date, b: Date): number {
-  return +a - +b;
-}
-
-/**
- * An ordering that compares booleans by truth. Falsehood is considered smaller
- * than truth.
- */
-export function byBoolean(a: boolean, b: boolean): number {
-  return +a - +b;
 }
