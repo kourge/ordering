@@ -24,9 +24,7 @@ export class Ordering<T> {
    * transformation function from `U` to `T`.
    */
   on<U>(f: (data: U) => T): Ordering<U> {
-    return new Ordering((a: U, b: U): number =>
-      this.compare(f(a), f(b))
-    );
+    return new Ordering<U>((a, b) => this.compare(f(a), f(b)));
   }
 }
 
