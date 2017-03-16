@@ -1,10 +1,10 @@
 import {expect} from 'chai';
-import {Ordering} from './index';
+import {ordering} from './index';
 import {byNumber} from './comparator';
 
 describe('Ordering', () => {
   describe('reverse', () => {
-    const byNumberReversed = new Ordering(byNumber).reverse().compare;
+    const byNumberReversed = ordering(byNumber).reverse().compare;
 
     it('retains equality', () => {
       expect(byNumber(0, 0)).to.equal(0);
@@ -38,7 +38,7 @@ describe('Ordering', () => {
     const y: Thing = {id: 5};
 
     it('derives a comparator correctly', () => {
-      const byThingId = new Ordering(byNumber)
+      const byThingId = ordering(byNumber)
         .on<Thing>(({id}) => id)
         .compare;
 
