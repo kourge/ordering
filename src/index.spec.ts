@@ -1,10 +1,10 @@
 import {expect} from 'chai';
-import {Ordering, WrappedOrdering} from './index';
+import {Ordering} from './index';
 import {byNumber} from './comparator';
 
-describe('WrappedOrdering', () => {
+describe('Ordering', () => {
   describe('reverse', () => {
-    const byNumberReversed = new WrappedOrdering(byNumber).reverse().ordering;
+    const byNumberReversed = new Ordering(byNumber).reverse().compare;
 
     it('retains equality', () => {
       expect(byNumber(0, 0)).to.equal(0);
@@ -37,10 +37,10 @@ describe('WrappedOrdering', () => {
     const x: Thing = {id: 3};
     const y: Thing = {id: 5};
 
-    it('derives an ordering correctly', () => {
-      const byThingId = new WrappedOrdering(byNumber)
+    it('derives a comparator correctly', () => {
+      const byThingId = new Ordering(byNumber)
         .on<Thing>(({id}) => id)
-        .ordering;
+        .compare;
 
       expect(byThingId(x, y)).to.be.lessThan(0);
       expect(byThingId(x, x)).to.equal(0);
