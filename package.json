@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index",
   "scripts": {
-    "test": "mocha --require ts-node/register ./spec/*.spec.ts",
+    "test": "mocha --require ts-node/register ./src/**/*.spec.ts",
     "prebuild": "rm -rf lib",
     "build": "tsc",
     "prepublish": "npm run build"
