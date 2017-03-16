@@ -6,9 +6,6 @@
     "noLib": false,
     "outDir": "lib/"
   },
-  "files": [
-    "./typings/index.d.ts"
-  ],
   "include": [
     "src/**/*"
   ],

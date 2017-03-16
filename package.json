@@ -5,10 +5,8 @@
   "main": "lib/index.js",
   "typings": "lib/index",
   "scripts": {
-    "typings": "typings",
-    "pretest": "typings install",
     "test": "mocha --require ts-node/register ./spec/*.spec.ts",
-    "prebuild": "rm -rf lib && typings install",
+    "prebuild": "rm -rf lib",
     "build": "tsc",
     "prepublish": "npm run build"
   },
@@ -33,10 +31,11 @@
   },
   "homepage": "https://github.com/kourge/ordering#readme",
   "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/mocha": "^2.2.40",
     "chai": "3.5.0",
     "mocha": "3.2.0",
     "ts-node": "2.1.0",
-    "typescript": "2.2.1",
-    "typings": "^1.0.4"
+    "typescript": "2.2.1"
   }
 }
