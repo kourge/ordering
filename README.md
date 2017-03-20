@@ -93,11 +93,11 @@ be sorted with ease.
 
 ## TypeScript support
 
-This module can be directly imported in TypeScript. `Comparator<T>` is an
-importable interface, and `Ordering<T>` is an importable class. Note that
-`join` only allows joining comparators that compare the same type. Additionally
-the `on` method provided by `Ordering<T>` can feel even more succinct when
-combining type annotation and destructuring:
+This module can be directly imported in TypeScript. `Comparator<T>` and
+`Ordering<T>` are both importable interfaces. Note that `join` only allows
+joining comparators that compare the same type. Additionally the `on` method
+provided by `Ordering<T>` can feel even more succinct when combining type
+annotation and destructuring:
 
 ```ts
 import {ordering} from '@kourge/ordering';
