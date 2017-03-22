@@ -2,13 +2,13 @@
   "name": "@kourge/ordering",
   "version": "0.0.2",
   "description": "A set of comparator functions, as well as tools for manipulating, projecting, and combining them",
-  "main": "lib/index.js",
-  "typings": "lib/index",
+  "main": "index.js",
+  "typings": "index",
   "scripts": {
     "test": "mocha --require ts-node/register ./src/**/*.spec.ts",
     "prebuild": "rm -rf lib",
     "build": "tsc",
-    "prepublish": "npm run build"
+    "prepare": "npm run build && ts-node ./prepare.ts"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/mocha": "^2.2.40",
+    "@types/node": "^7.0.8",
     "chai": "3.5.0",
     "mocha": "3.2.0",
     "ts-node": "2.1.0",
