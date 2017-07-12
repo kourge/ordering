@@ -63,9 +63,11 @@ describe('byString', () => {
   });
 
   it('sorts strings correctly', () => {
-    const result = ['B', 'b', 'A', 'a'].sort(byString);
+    const input = ['B', 'b', 'A', 'a'];
+    const expected = [...input].sort((a, b) => a.localeCompare(b));
+    const result = [...input].sort(byString);
 
-    expect(result).toEqual(['a', 'A', 'b', 'B']);
+    expect(result).toEqual(expected);
   });
 
   describe('caseInsensitive', () => {
