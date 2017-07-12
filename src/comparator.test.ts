@@ -1,5 +1,5 @@
 import {
-  alwaysEqual, byBoolean, byDate, byNumber, byString, join,
+  alwaysEqual, byBoolean, byDate, byNumber, byString, join, ranking,
 } from './comparator';
 
 describe('join', () => {
@@ -32,6 +32,33 @@ describe('join', () => {
     const result = [z, x, w, y].sort(join(byId, byName));
 
     expect(result).toEqual([w, x, y, z]);
+  });
+});
+
+describe('ranking', () => {
+  enum Spam { Foo = 'foo', Bar = 'bar' }
+
+  it('takes a scoring function', () => {
+    const f = ranking<Spam>((s) => {
+      switch (s) {
+        case Spam.Foo: return 1;
+        case Spam.Bar: return 2;
+      }
+    });
+
+    expect(f(Spam.Foo, Spam.Foo)).toEqual(0);
+    expect(f(Spam.Bar, Spam.Bar)).toEqual(0);
+    expect(f(Spam.Foo, Spam.Bar)).toBeLessThan(0);
+    expect(f(Spam.Bar, Spam.Foo)).toBeGreaterThan(0);
+  });
+
+  it('generates a scoring function from an array', () => {
+    const f = ranking([Spam.Foo, Spam.Bar]);
+
+    expect(f(Spam.Foo, Spam.Foo)).toEqual(0);
+    expect(f(Spam.Bar, Spam.Bar)).toEqual(0);
+    expect(f(Spam.Foo, Spam.Bar)).toBeLessThan(0);
+    expect(f(Spam.Bar, Spam.Foo)).toBeGreaterThan(0);
   });
 });
 
