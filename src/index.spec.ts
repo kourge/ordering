@@ -1,4 +1,3 @@
-import {expect} from 'chai';
 import {ordering} from './index';
 import {byNumber} from './comparator';
 
@@ -7,24 +6,24 @@ describe('Ordering', () => {
     const byNumberReversed = ordering(byNumber).reverse().compare;
 
     it('retains equality', () => {
-      expect(byNumber(0, 0)).to.equal(0);
-      expect(byNumberReversed(0, 0)).to.equal(0);
+      expect(byNumber(0, 0)).toBe(0);
+      expect(byNumberReversed(0, 0)).toBe(0);
     });
 
     it('flips less than to greater than', () => {
-      expect(byNumber(5, 9000)).to.be.lessThan(0);
-      expect(byNumberReversed(5, 9000)).to.be.greaterThan(0);
+      expect(byNumber(5, 9000)).toBeLessThan(0);
+      expect(byNumberReversed(5, 9000)).toBeGreaterThan(0);
     });
 
     it('flips greater than to less than', () => {
-      expect(byNumber(9000, 5)).to.be.greaterThan(0);
-      expect(byNumberReversed(9000, 5)).to.be.lessThan(0);
+      expect(byNumber(9000, 5)).toBeGreaterThan(0);
+      expect(byNumberReversed(9000, 5)).toBeLessThan(0);
     });
 
     it('sorts numbers in reverse', () => {
       const result = [1, 3, 5, 2, 4].sort(byNumberReversed);
 
-      expect(result).to.deep.equal([5, 4, 3, 2, 1]);
+      expect(result).toEqual([5, 4, 3, 2, 1]);
     });
 
     it('caches the original comparator in case of double reversal', () => {
@@ -33,7 +32,7 @@ describe('Ordering', () => {
         .reverse()
         .reverse();
 
-      expect(doubleReversed.compare).to.equal(numberOrdering.compare);
+      expect(doubleReversed.compare).toBe(numberOrdering.compare);
     });
   });
 
@@ -51,9 +50,9 @@ describe('Ordering', () => {
         .on<Thing>(({id}) => id)
         .compare;
 
-      expect(byThingId(x, y)).to.be.lessThan(0);
-      expect(byThingId(x, x)).to.equal(0);
-      expect(byThingId(w, x)).to.be.greaterThan(0);
+      expect(byThingId(x, y)).toBeLessThan(0);
+      expect(byThingId(x, x)).toBe(0);
+      expect(byThingId(w, x)).toBeGreaterThan(0);
     });
   });
 });
