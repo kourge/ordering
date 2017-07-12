@@ -5,7 +5,7 @@
   "main": "index.js",
   "typings": "index",
   "scripts": {
-    "test": "mocha --require ts-node/register ./src/**/*.spec.ts",
+    "test": "jest",
     "prebuild": "rm -rf lib",
     "build": "tsc",
     "package": "npm run build && ts-node ./prepare.ts"
@@ -31,12 +31,21 @@
   },
   "homepage": "https://github.com/kourge/ordering#readme",
   "devDependencies": {
-    "@types/chai": "^3.4.35",
-    "@types/mocha": "^2.2.40",
+    "@types/jest": "^20.0.2",
     "@types/node": "^7.0.8",
-    "chai": "3.5.0",
-    "mocha": "3.2.0",
-    "ts-node": "2.1.0",
+    "jest": "^20.0.4",
+    "ts-jest": "^20.0.7",
     "typescript": "^2.4.1"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   }
 }
