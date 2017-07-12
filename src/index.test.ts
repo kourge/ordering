@@ -1,5 +1,5 @@
-import {ordering} from './index';
 import {byNumber} from './comparator';
+import {ordering} from './index';
 
 describe('Ordering', () => {
   describe('reverse', () => {

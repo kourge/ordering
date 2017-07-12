@@ -1,5 +1,5 @@
 import {
-  alwaysEqual, join, byNumber, byString, byDate, byBoolean
+  alwaysEqual, byBoolean, byDate, byNumber, byString, join,
 } from './comparator';
 
 describe('join', () => {
