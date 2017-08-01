@@ -33,6 +33,8 @@ The members exported by `ordering/comparator` are:
 - `join` takes multiple comparators and combines them into a single one. If two
   elements are considered equal by the first one, the second one is used, and
   so on.
+- `ranking` takes an array of primitive values or a scoring function and generates
+  a comparator that sorts those values in the desired order.
 
 ```js
 import {byString, byNumber, join} from '@kourge/ordering/comparator';
@@ -41,6 +43,20 @@ const byName = (person1, person2) => byString(person1.name, person2.name);
 const byAge = (person1, person2) => byNumber(person1.age, person2.age);
 
 const byNameThenByAge = join(byName, byAge);
+```
+
+```js
+import {ranking} from '@kourge/ordering/comparator';
+
+const byRarity = ranking([
+  'common',
+  'uncommon',
+  'rare',
+  'legendary',
+  'exotic'
+]);
+
+const byAge = ranking(person => person.age);
 ```
 
 ## `Ordering<T>`
@@ -91,6 +107,32 @@ const byNameThenByAge = join(byName, byAge);
 By combining these different utilities, any kind of complex data or object can
 be sorted with ease.
 
+## `Scoring<T>`
+
+A `Scoring<T>` offers a simpler alternative to a comparator. Instead of
+comparing two different values, a scoring function takes a value and produces
+a numeric score. These scores are then used to sort values. This is achieved by
+converting the `Scoring<T>` into a `Comparator<T>` through the `ranking`
+function.
+
+From this relationship between a scoring function and a comparator arises two
+things of note:
+
+1. `ranking(f)` is equivalent to `ordering(byNumber).on(f).compare`.
+1. A scoring function is called many times over the course of sorting, so take
+   care that it is efficient.
+
+The members exported by `ordering/scoring` are:
+- `scoringFromArray` generates a scoring from an array. It performs a reverse
+  lookup from the array: given an element, it produces the element's index in
+  the array. Linear search is needed, and the `SameValueZero` algorithm is used
+  for equality.
+- `scoringFromArrayByMap` also generates a scoring from an array. Its behavior
+  is almost identical to `scoringFromArray`. The difference is that it uses an
+  ECMAScript 6 `Map` to perform the same reverse lookup, and thus its
+  performance characteristics should be sublinear. Furthermore, this only works
+  if the environment has a `Map` available.
+
 ## TypeScript support
 
 This module can be directly imported in TypeScript. `Comparator<T>` and
@@ -101,10 +143,22 @@ annotation and destructuring:
 
 ```ts
 import {ordering} from '@kourge/ordering';
-import {byString, byNumber, join} from '@kourge/ordering/comparator';
+import {byString, byNumber, join, ranking} from '@kourge/ordering/comparator';
 
 const byName = ordering(byString).on<Person>(({name}) => name).compare;
 const byAge = ordering(byNumber).on<Person>(({age}) => age).compare;
 
 const byNameThenByAge = join(byName, byAge);
+
+enum Rarity {
+  Common, Uncommon, Rare, Legendary, Exotic
+}
+
+const byRarity = ranking<Rarity>([
+  Rarity.Common,
+  Rarity.Uncommon,
+  Rarity.Rare,
+  Rarity.Legendary,
+  Rarity.Exotic,
+]);
 ```
