@@ -1,22 +1,21 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es6"],
     "module": "commonjs",
+    "lib": ["ES6"],
     "declaration": true,
-    "noLib": false,
-    "outDir": "lib/",
-    "strict": true
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./lib",
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts"
-  ],
-  "compileOnSave": false,
-  "atom": {
-    "rewriteTsconfig": false
-  }
+
+  "include": ["src/**/*"],
+
+  "exclude": ["node_modules", "src/**/*.test.ts"]
 }

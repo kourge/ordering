@@ -77,7 +77,7 @@ export function ranking<T>(scoring: T[] | Scoring<T>): Comparator<T> {
 /**
  * A comparator that reports every comparison as equal.
  */
-export function alwaysEqual<T>(a: T, b: T): number {
+export function alwaysEqual<T>(_a: T, _b: T): number {
   return 0;
 }
 

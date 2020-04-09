@@ -1,5 +1,3 @@
-import {Comparator} from './comparator';
-
 /**
  * A `Scoring<T>` is a function that takes an item of type `T` and returns a
  * numeric score of said item, which is meant to denote ranking. A scoring
