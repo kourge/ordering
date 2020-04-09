@@ -7,8 +7,7 @@
   "scripts": {
     "test": "jest",
     "prebuild": "rm -rf lib",
-    "build": "tsc",
-    "package": "npm run build && ts-node ./prepare.ts"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -31,12 +30,9 @@
   },
   "homepage": "https://github.com/kourge/ordering#readme",
   "devDependencies": {
-    "@types/fs-extra": "^4.0.0",
     "@types/jest": "^20.0.2",
-    "@types/node": "^7.0.8",
     "jest": "^20.0.4",
     "ts-jest": "^20.0.7",
-    "ts-node": "^3.3.0",
     "typescript": "^2.4.1"
   },
   "jest": {
