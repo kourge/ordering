@@ -14,7 +14,6 @@ export interface Comparator<T> {
  * equality, the next one is used as a fallback. If no comparators are given,
  * the resulting comparator considers every comparison as equal.
  */
-// tslint:disable-next-line:array-type
 export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
   switch (comparators.length) {
     case 0:
@@ -45,7 +44,6 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
  */
 const makeScoring = (() => {
   try {
-    // tslint:disable-next-line:no-unused-expression
     Map;
     return scoringFromArrayByMap;
   } catch (_) {

@@ -1,6 +1,5 @@
 import {Comparator} from './comparator';
 
-// tslint:disable-next-line:class-name
 class Ordering_<T> {
   constructor(public compare: Comparator<T>) {}
 
