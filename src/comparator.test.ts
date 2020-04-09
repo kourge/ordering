@@ -1,5 +1,11 @@
 import {
-  alwaysEqual, byBoolean, byDate, byNumber, byString, join, ranking,
+  alwaysEqual,
+  byBoolean,
+  byDate,
+  byNumber,
+  byString,
+  join,
+  ranking,
 } from './comparator';
 
 describe('join', () => {
@@ -36,13 +42,18 @@ describe('join', () => {
 });
 
 describe('ranking', () => {
-  enum Spam { Foo = 'foo', Bar = 'bar' }
+  enum Spam {
+    Foo = 'foo',
+    Bar = 'bar',
+  }
 
   it('takes a scoring function', () => {
-    const f = ranking<Spam>((s) => {
+    const f = ranking<Spam>(s => {
       switch (s) {
-        case Spam.Foo: return 1;
-        case Spam.Bar: return 2;
+        case Spam.Foo:
+          return 1;
+        case Spam.Bar:
+          return 2;
       }
     });
 

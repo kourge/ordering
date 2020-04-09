@@ -28,9 +28,7 @@ describe('Ordering', () => {
 
     it('caches the original comparator in case of double reversal', () => {
       const numberOrdering = ordering(byNumber);
-      const doubleReversed = numberOrdering
-        .reverse()
-        .reverse();
+      const doubleReversed = numberOrdering.reverse().reverse();
 
       expect(doubleReversed.compare).toBe(numberOrdering.compare);
     });
@@ -46,9 +44,7 @@ describe('Ordering', () => {
     const y: Thing = {id: 5};
 
     it('derives a comparator correctly', () => {
-      const byThingId = ordering(byNumber)
-        .on<Thing>(({id}) => id)
-        .compare;
+      const byThingId = ordering(byNumber).on<Thing>(({id}) => id).compare;
 
       expect(byThingId(x, y)).toBeLessThan(0);
       expect(byThingId(x, x)).toBe(0);
