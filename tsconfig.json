@@ -3,5 +3,5 @@
 
   "references": [{"path": "./tsconfig.build.json"}],
 
-  "include": ["src/**/*"]
+  "include": ["./*.ts"]
 }

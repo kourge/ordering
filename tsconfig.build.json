@@ -5,11 +5,11 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./lib",
+    "outDir": "./",
 
     "composite": true
   },
 
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.test.ts"]
+  "include": ["./*.ts"],
+  "exclude": ["node_modules", "./*.test.ts"]
 }

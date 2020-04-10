@@ -34,6 +34,3 @@ node_modules
 
 # TypeScript type definitions
 typings
-
-# TypeScript source files
-src

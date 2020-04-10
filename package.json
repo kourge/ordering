@@ -9,6 +9,12 @@
     "build": "tsc --build tsconfig.build.json --verbose",
     "clean": "tsc --build tsconfig.build.json --clean"
   },
+  "files": [
+    "*.d.ts",
+    "*.d.ts.map",
+    "*.js",
+    "*.js.map"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kourge/ordering.git"
