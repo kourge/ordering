@@ -6,8 +6,8 @@ describe('Ordering', () => {
     const byNumberReversed = ordering(byNumber).reverse().compare;
 
     it('retains equality', () => {
-      expect(byNumber(0, 0)).toBe(0);
-      expect(byNumberReversed(0, 0)).toBe(0);
+      expect(byNumber(1, 1)).toBe(0);
+      expect(byNumberReversed(1, 1)).toEqual(-0);
     });
 
     it('flips less than to greater than', () => {
