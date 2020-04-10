@@ -1,21 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["ES6"],
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./lib",
+  "extends": "./tsconfig.base.json",
 
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
-  },
+  "references": [{"path": "./tsconfig.build.json"}],
 
-  "include": ["src/**/*"],
-
-  "exclude": ["node_modules", "src/**/*.test.ts"]
+  "include": ["src/**/*"]
 }
