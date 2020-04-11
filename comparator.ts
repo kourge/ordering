@@ -10,8 +10,8 @@ export interface Comparator<T> {
 }
 
 /**
- * Joins one or more existing comparators so that when a comparison results in
- * equality, the next one is used as a fallback.
+ * Joins one or more existing comparators into a new comparator so that when a
+ * comparison results in equality, the next one is used as a fallback.
  * @throws {TypeError} if no comparators are given
  */
 export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
@@ -36,12 +36,10 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
         return last(a, b);
       };
 
-      if (Object.defineProperty) {
-        const names = comparators.map(nameOfFunction).join(', ');
-        Object.defineProperty(result, 'name', {
-          value: `joinedComparator(${names})`,
-        });
-      }
+      const names = comparators.map(nameOfFunction).join(', ');
+      Object.defineProperty?.(result, 'name', {
+        value: `joinedComparator(${names})`,
+      });
 
       return result;
   }
