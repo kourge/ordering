@@ -10,14 +10,14 @@ export interface Comparator<T> {
 }
 
 /**
- * Joins zero or more existing comparators so that when a comparison results in
- * equality, the next one is used as a fallback. If no comparators are given,
- * the resulting comparator considers every comparison as equal.
+ * Joins one or more existing comparators so that when a comparison results in
+ * equality, the next one is used as a fallback.
+ * @throws {TypeError} if no comparators are given
  */
 export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
   switch (comparators.length) {
     case 0:
-      return alwaysEqual;
+      throw new TypeError('`join` must be given at least one comparator.');
     case 1:
       return comparators[0];
     default:

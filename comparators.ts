@@ -1,11 +1,4 @@
 /**
- * A comparator that reports every comparison as equal.
- */
-export function alwaysEqual<T>(_a: T, _b: T): number {
-  return 0;
-}
-
-/**
  * A comparator that compares numbers.
  */
 export function byNumber(a: number, b: number): number {
