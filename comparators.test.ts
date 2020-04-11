@@ -1,4 +1,4 @@
-import {byBoolean, byDate, byNumber, byString} from './comparators';
+import {byBoolean, byCodeUnit, byDate, byNumber, byString} from './comparators';
 
 describe('byNumber', () => {
   it('compares by numeric value', () => {
@@ -39,6 +39,24 @@ describe('byString', () => {
     it('defines equality', () => {
       expect(byString.caseInsensitive('a', 'A')).toBe(0);
     });
+  });
+});
+
+describe('byCodeUnit', () => {
+  it('compares by code unit', () => {
+    expect(byCodeUnit('\x00', '\x01')).toBeLessThan(0);
+    expect(byCodeUnit('\x01', '\x00')).toBeGreaterThan(0);
+  });
+
+  it('defines equality', () => {
+    expect(byCodeUnit('\ud83d\udc96', '\ud83d\udc96')).toBe(0);
+  });
+
+  it('sorts code units correctly', () => {
+    const input = ['[', 'a', ']', ' ', '_', '^', 'Z'];
+    const result = [...input].sort(byCodeUnit);
+
+    expect(result).toEqual([' ', 'Z', '[', ']', '^', '_', 'a']);
   });
 });
 
