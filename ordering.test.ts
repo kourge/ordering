@@ -1,4 +1,4 @@
-import {byNumber} from './comparator';
+import {byNumber} from './comparators';
 import {ordering} from './ordering';
 
 describe('Ordering', () => {
