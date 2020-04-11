@@ -1,14 +1,15 @@
-import {Comparator} from './comparator';
+import {Comparator, reversed} from './comparator';
 
 class Ordering_<T> {
   constructor(public compare: Comparator<T>) {}
 
-  reverse(): Ordering<T> {
-    const reversed = ordering<T>((a, b) => -this.compare(a, b));
-    // Cache the current ordering as the reverse of the reversed ordering.
-    reversed.reverse = () => this;
+  reversed(): Ordering<T> {
+    const result = ordering<T>(reversed(this.compare));
 
-    return reversed;
+    // Cache the current ordering as the reverse of the reversed ordering.
+    result.reversed = () => this;
+
+    return result;
   }
 
   on<U>(f: (data: U) => T): Ordering<U> {
@@ -29,7 +30,7 @@ export interface Ordering<T> {
   /**
    * Returns an ordering that is a reversal of the current one.
    */
-  reverse(): Ordering<T>;
+  reversed(): Ordering<T>;
 
   /**
    * Derives an `Ordering<U>` out of the current `Ordering<T>` given a

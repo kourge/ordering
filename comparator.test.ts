@@ -1,4 +1,4 @@
-import {join, ranking} from './comparator';
+import {join, ranking, reversed} from './comparator';
 
 describe('join', () => {
   interface Thing {
@@ -39,6 +39,34 @@ describe('join', () => {
     expect(joined.name).toBe(
       `joinedComparator(${byId.name}, ${byName.displayName})`,
     );
+  });
+});
+
+describe('reversed', () => {
+  function byNumber(a: number, b: number): number {
+    return a - b;
+  }
+  const byNumberReversed = reversed(byNumber);
+
+  it('retains equality', () => {
+    expect(byNumber(1, 1)).toBe(0);
+    expect(byNumberReversed(1, 1)).toEqual(-0);
+  });
+
+  it('flips less than to greater than', () => {
+    expect(byNumber(5, 9000)).toBeLessThan(0);
+    expect(byNumberReversed(5, 9000)).toBeGreaterThan(0);
+  });
+
+  it('flips greater than to less than', () => {
+    expect(byNumber(9000, 5)).toBeGreaterThan(0);
+    expect(byNumberReversed(9000, 5)).toBeLessThan(0);
+  });
+
+  it('sorts numbers in reverse', () => {
+    const result = [1, 3, 5, 2, 4].sort(byNumberReversed);
+
+    expect(result).toEqual([5, 4, 3, 2, 1]);
   });
 });
 

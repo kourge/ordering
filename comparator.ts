@@ -47,6 +47,21 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
   }
 }
 
+/**
+ * Creates a reversed version of the given comparator.
+ */
+export function reversed<T>(comparator: Comparator<T>): Comparator<T> {
+  const result = function reversedComparator(a: T, b: T): number {
+    return -comparator(a, b);
+  };
+
+  Object.defineProperty?.(result, 'name', {
+    value: `reversed(${nameOfFunction(comparator)})`,
+  });
+
+  return result;
+}
+
 function nameOfFunction(f: Function & {displayName?: string}): string {
   return f?.displayName ?? f.name;
 }
