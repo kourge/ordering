@@ -13,6 +13,7 @@ describe('join', () => {
   function byName(a: Thing, b: Thing): number {
     return a.name.localeCompare(b.name);
   }
+  byName.displayName = 'byLocaleName';
 
   const w: Thing = {id: 3, name: 'w'};
   const x: Thing = {id: 3, name: 'x'};
@@ -30,6 +31,14 @@ describe('join', () => {
     const result = [z, x, w, y].sort(join(byId, byName));
 
     expect(result).toEqual([w, x, y, z]);
+  });
+
+  it('defines a debuggale function name', () => {
+    const joined = join(byId, byName);
+
+    expect(joined.name).toBe(
+      `joinedComparator(${byId.name}, ${byName.displayName})`,
+    );
   });
 });
 

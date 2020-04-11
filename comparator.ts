@@ -21,7 +21,7 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
     case 1:
       return comparators[0];
     default:
-      return function joinedComparator(a: T, b: T): number {
+      const result = function joinedComparator(a: T, b: T): number {
         const lastIndex = comparators.length - 1;
         const last = comparators[lastIndex];
         const rest = comparators.slice(0, lastIndex);
@@ -35,7 +35,20 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
 
         return last(a, b);
       };
+
+      if (Object.defineProperty) {
+        const names = comparators.map(nameOfFunction).join(', ');
+        Object.defineProperty(result, 'name', {
+          value: `joinedComparator(${names})`,
+        });
+      }
+
+      return result;
   }
+}
+
+function nameOfFunction(f: Function & {displayName?: string}): string {
+  return f?.displayName ?? f.name;
 }
 
 /**
