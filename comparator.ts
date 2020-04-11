@@ -60,6 +60,34 @@ export function reversed<T>(comparator: Comparator<T>): Comparator<T> {
   return result;
 }
 
+/**
+ * Creates a comparator that compares two items based on their keys. The `keyOf`
+ * function is invoked many times, so take care that it is efficient.
+ *
+ * @param keyOf a function that calculates the key of an item
+ * @param keyComparator a comparator that can compare keys returned by `keyOf`
+ *
+ * @example
+ * ```ts
+ * interface Person {
+ *   name: string;
+ *   age: number;
+ * }
+ *
+ * const byAge = keyed((person: Person) => person.age, byNumber);
+ * ```
+ */
+export function keyed<T, Property>(
+  keyOf: (element: T) => Property,
+  keyComparator: Comparator<Property>,
+): Comparator<T> {
+  const result = function keyedComparator(a: T, b: T): number {
+    return keyComparator(keyOf(a), keyOf(b));
+  };
+
+  return result;
+}
+
 function nameOfFunction(f: Function & {displayName?: string}): string {
   return f?.displayName ?? f.name;
 }

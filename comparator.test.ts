@@ -1,4 +1,4 @@
-import {join, ranking, reversed} from './comparator';
+import {join, reversed, keyed, ranking} from './comparator';
 
 describe('join', () => {
   interface Thing {
@@ -67,6 +67,28 @@ describe('reversed', () => {
     const result = [1, 3, 5, 2, 4].sort(byNumberReversed);
 
     expect(result).toEqual([5, 4, 3, 2, 1]);
+  });
+});
+
+describe('keyed', () => {
+  interface Thing {
+    id: number;
+  }
+
+  const w: Thing = {id: 7};
+  const x: Thing = {id: 3};
+  const y: Thing = {id: 5};
+
+  function byNumber(a: number, b: number): number {
+    return a - b;
+  }
+
+  it('derives a comparator correctly', () => {
+    const byThingId = keyed(({id}: Thing) => id, byNumber);
+
+    expect(byThingId(x, y)).toBeLessThan(0);
+    expect(byThingId(x, x)).toBe(0);
+    expect(byThingId(w, x)).toBeGreaterThan(0);
   });
 });
 

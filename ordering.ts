@@ -1,4 +1,4 @@
-import {Comparator, reversed} from './comparator';
+import {Comparator, reversed, keyed} from './comparator';
 
 class Ordering_<T> {
   constructor(public compare: Comparator<T>) {}
@@ -13,7 +13,7 @@ class Ordering_<T> {
   }
 
   on<U>(f: (data: U) => T): Ordering<U> {
-    return ordering<U>((a, b) => this.compare(f(a), f(b)));
+    return ordering<U>(keyed(f, this.compare));
   }
 }
 
