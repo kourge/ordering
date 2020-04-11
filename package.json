@@ -3,11 +3,11 @@
   "version": "1.0.1",
   "description": "A set of comparator functions, as well as tools for manipulating, projecting, and combining them",
   "main": "index.js",
-  "typings": "index",
   "scripts": {
     "test": "jest",
     "build": "tsc --build tsconfig.build.json --verbose",
-    "clean": "tsc --build tsconfig.build.json --clean"
+    "clean": "tsc --build tsconfig.build.json --clean",
+    "prepublishOnly": "npm-run-all clean build"
   },
   "files": [
     "*.d.ts",
@@ -43,6 +43,7 @@
     "ts-jest": "^25.3.1",
     "typescript": "^3.8.3"
   },
+  "sideEffects": false,
   "prettier": {
     "printWidth": 80,
     "tabWidth": 2,
