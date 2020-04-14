@@ -7,7 +7,10 @@
     "test": "jest",
     "build": "tsc --build tsconfig.build.json --verbose",
     "clean": "tsc --build tsconfig.build.json --clean",
-    "prepublishOnly": "npm-run-all clean build"
+    "prepublishOnly": "npm-run-all clean build",
+    "docs:update": "npm-run-all docs:clean docs:build",
+    "docs:build": "typedoc",
+    "docs:clean": "rm -r ./docs"
   },
   "files": [
     "*.d.ts",

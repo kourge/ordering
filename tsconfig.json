@@ -1,3 +1,20 @@
 {
-  "extends": "./tsconfig.base.json"
+  "extends": "./tsconfig.base.json",
+
+  "typedocOptions": {
+    "plugin": "typedoc-plugin-markdown",
+
+    "hideSources": true,
+    "readme": "none",
+
+    "mode": "library",
+    "out": "./docs",
+
+    "exclude": "*.test.ts",
+    "excludeNotExported": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+
+    "includeVersion": true
+  }
 }
