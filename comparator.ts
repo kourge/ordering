@@ -1,27 +1,50 @@
+/**
+ * Defines the {@linkcode Comparator} interface, as well as providing various
+ * convenience functions for creating comparators out of data or other existing
+ * comparators.
+ * @packageDocumentation
+ */
 import {Scoring, scoringFromArray, scoringFromArrayByMap} from './scoring';
 
 /**
- * A `Comparator<T>` can compare two items of type `T`. A return value of 0
- * means the two items are equal, a value lesser than 0 means `a` is lesser
- * than `b`, and a value greater than 0 means `a` is great than `b`.
+ * A [comparator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description)
+ * is a function that takes two elements of the same type and returns a number
+ * that indicates the comparison result.
+ *
+ * @returns
+ * - `0` or `-0` if the two elements are considered equal.
+ * - Any number greater than `0` if the first element is greater than the second
+ *   one.
+ * - Any number lesser than `0` if the first is lesser than the second.
  */
-export interface Comparator<T> {
-  (a: T, b: T): number;
+export interface Comparator<Element> {
+  (a: Element, b: Element): number;
 }
 
 /**
  * Joins one or more existing comparators into a new comparator so that when a
  * comparison results in equality, the next one is used as a fallback.
- * @throws {TypeError} if no comparators are given
+ *
+ * @throws {`TypeError`} if no comparators are given
+ *
+ * @example
+ * ```ts
+ * const byName = (person1, person2) => byString(person1.name, person2.name);
+ * const byAge = (person1, person2) => byNumber(person1.age, person2.age);
+ *
+ * const byNameThenByAge = join(byName, byAge);
+ * ```
  */
-export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
+export function join<Element>(
+  ...comparators: Comparator<Element>[]
+): Comparator<Element> {
   switch (comparators.length) {
     case 0:
       throw new TypeError('`join` must be given at least one comparator.');
     case 1:
       return comparators[0];
     default:
-      const result = function joinedComparator(a: T, b: T): number {
+      const result = function joinedComparator(a: Element, b: Element): number {
         const lastIndex = comparators.length - 1;
         const last = comparators[lastIndex];
         const rest = comparators.slice(0, lastIndex);
@@ -47,9 +70,16 @@ export function join<T>(...comparators: Comparator<T>[]): Comparator<T> {
 
 /**
  * Creates a reversed version of the given comparator.
+ *
+ * @example
+ * ```ts
+ * const byNumberDescending = reversed(byNumber);
+ * ```
  */
-export function reversed<T>(comparator: Comparator<T>): Comparator<T> {
-  const result = function reversedComparator(a: T, b: T): number {
+export function reversed<Element>(
+  comparator: Comparator<Element>,
+): Comparator<Element> {
+  const result = function reversedComparator(a: Element, b: Element): number {
     return -comparator(a, b);
   };
 
@@ -61,10 +91,14 @@ export function reversed<T>(comparator: Comparator<T>): Comparator<T> {
 }
 
 /**
- * Creates a comparator that compares two items based on their keys. The `keyOf`
- * function is invoked many times, so take care that it is efficient.
+ * Creates a comparator that compares two elements based on their keys.
  *
- * @param keyOf a function that calculates the key of an item
+ * The `keyOf` function is called repeatedly throughout the sorting process, so
+ * make sure that it is efficient. If it is computationally costly to calculate
+ * the key of an element, consider using a `Map` or a `WeakMap` to cache a key
+ * once it is calculated.
+ *
+ * @param keyOf a function that calculates the key of an element
  * @param keyComparator a comparator that can compare keys returned by `keyOf`
  *
  * @example
@@ -77,19 +111,15 @@ export function reversed<T>(comparator: Comparator<T>): Comparator<T> {
  * const byAge = keyed((person: Person) => person.age, byNumber);
  * ```
  */
-export function keyed<T, Property>(
-  keyOf: (element: T) => Property,
+export function keyed<Element, Property>(
+  keyOf: (element: Element) => Property,
   keyComparator: Comparator<Property>,
-): Comparator<T> {
-  const result = function keyedComparator(a: T, b: T): number {
+): Comparator<Element> {
+  const result = function keyedComparator(a: Element, b: Element): number {
     return keyComparator(keyOf(a), keyOf(b));
   };
 
   return result;
-}
-
-function nameOfFunction(f: Function & {displayName?: string}): string {
-  return f?.displayName ?? f.name;
 }
 
 /**
@@ -106,24 +136,51 @@ const makeScoring = (() => {
 })();
 
 /**
- * Generates a `Comparator<T>` given a scoring function `Scoring<T>`.
- * Alternatively an array can be given instead, in which case a scoring function
- * is generated automatically. This is very useful for any sort of enum-like
- * type, where a limited subset of strings and / or numbers are used for special
- * meaning. In the scenario where an unknown value is compared against, it is
- * treated as the lowest possible value, i.e. unknown values are given the score
- * of -1.
+ * Generates a {@linkcode Comparator} given an array of ordered elements or a
+ * scoring function {@linkcode Scoring}. This is useful for any sort of
+ * enum-like type, where a limited subset of strings and / or numbers are used
+ * for special meaning.
  *
- * A generated scoring function is guaranteed to have at least linear
- * efficiency, but in an environment where ECMAScript 6 `Map`s are supported,
- * the efficiency may become sublinear.
+ * When given an array, a scoring function is generated to look up from that
+ * array. This lookup process is at least linear, but becomes more efficient if
+ * a good implementation of `Map` is available in the environment. If the lookup
+ * fails because an unknown element not in the array was given, then it is given
+ * the lowest possible score of -1.
+ *
  * @param scoring An array denoting the desired order of ranking, or a custom
  * scoring function
+ *
+ * @example
+ * ```ts
+ * const byVowelCount = ranking<string>(word => word.match(/[aeiou]/gi).length);
+ *
+ * enum Rarity {
+ *   Common,
+ *   Uncommon,
+ *   Rare,
+ *   Legendary,
+ *   Exotic,
+ * }
+ *
+ * const byRarity = ranking<Rarity>([
+ *   Rarity.Common,
+ *   Rarity.Uncommon,
+ *   Rarity.Rare,
+ *   Rarity.Legendary,
+ *   Rarity.Exotic,
+ * ]);
+ * ```
  */
-export function ranking<T>(scoring: T[] | Scoring<T>): Comparator<T> {
+export function ranking<Element>(
+  scoring: Element[] | Scoring<Element>,
+): Comparator<Element> {
   const scoreOf = scoring instanceof Function ? scoring : makeScoring(scoring);
 
-  return function rankingComparator(a: T, b: T): number {
+  return function rankingComparator(a: Element, b: Element): number {
     return scoreOf(a) - scoreOf(b);
   };
+}
+
+function nameOfFunction(f: Function & {displayName?: string}): string {
+  return f?.displayName ?? f.name;
 }
