@@ -4,7 +4,7 @@
  * comparators.
  * @packageDocumentation
  */
-import {Scoring, scoringFromArray, scoringFromArrayByMap} from './scoring';
+import {Scoring, scoringFromArray, scoringFromArrayUsingMap} from './scoring';
 
 /**
  * A [comparator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description)
@@ -129,7 +129,7 @@ export function keyed<Element, Property>(
 const makeScoring = (() => {
   try {
     Map;
-    return scoringFromArrayByMap;
+    return scoringFromArrayUsingMap;
   } catch (_) {
     return scoringFromArray;
   }

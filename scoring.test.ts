@@ -1,4 +1,4 @@
-import {scoringFromArray, scoringFromArrayByMap} from './scoring';
+import {scoringFromArray, scoringFromArrayUsingMap} from './scoring';
 
 const order: Array<string | number> = ['foo', 3.14, '', NaN, 'bar', 5];
 
@@ -31,7 +31,7 @@ describe('scoringFromArray', () => {
 });
 
 describe('scoringFromArrayByMap', () => {
-  const f = scoringFromArrayByMap(order);
+  const f = scoringFromArrayUsingMap(order);
 
   it('handles a string correctly', () => {
     const result = f('foo');
