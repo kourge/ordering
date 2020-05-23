@@ -1,10 +1,45 @@
+/**
+ * Defines the {@linkcode Ordering} class that wraps around a
+ * {@linkcode Comparator} and provides convenience methods.
+ * @packageDocumentation
+ */
+
 import {Comparator, reversed, keyed} from './comparator';
 
-class Ordering_<T> {
-  constructor(public compare: Comparator<T>) {}
+/**
+ * An ordering is a wrapper around a {@linkcode Comparator} that makes it easy
+ * to create more comparators based on the wrapped one.
+ *
+ * To make an ordering, call {@linkcode ordering} with a comparator. To
+ * retrieve the comparator from an ordering, access its `compare` property.
+ *
+ * @example
+ * ```ts
+ * const numericOrdering = ordering(byNumber);
+ * numericOrdering.compare === byNumber;
+ * ```
+ */
+export class Ordering<Element> {
+  constructor(
+    /**
+     * The underlying comparator that drives this ordering.
+     */
+    public compare: Comparator<Element>,
+  ) {}
 
-  reversed(): Ordering<T> {
-    const result = ordering<T>(reversed(this.compare));
+  /**
+   * Returns an ordering that is a reversal of the current one.
+   *
+   * @example
+   * ```ts
+   * const byNumberDescending = ordering(byNumber).reverse().compare;
+   *
+   * const a = [1, 10, 3, 8, 5, 6, 7, 4, 9, 2, 0];
+   * a.sort(byNumberDescending);
+   * ```
+   */
+  reversed(): Ordering<Element> {
+    const result = ordering<Element>(reversed(this.compare));
 
     // Cache the current ordering as the reverse of the reversed ordering.
     result.reversed = () => this;
@@ -12,36 +47,39 @@ class Ordering_<T> {
     return result;
   }
 
-  on<U>(f: (data: U) => T): Ordering<U> {
-    return ordering<U>(keyed(f, this.compare));
+
+    const comparators = comparatorsOrOrderings.map(toComparator);
+    return ordering<Element>(join(this.compare, ...comparators));
+  }
+
+  /**
+   * Derives an `Ordering<T>` out of the current `Ordering<Element>` given a
+   * transformation function from `T` to `Element`.
+   *
+   * A common use case is to compare objects based on a specific property, given
+   * an existing comparator that already knows how to compare the type of that
+   * property.
+   *
+   * @example
+   * ```ts
+   * interface Person {
+   *   name: string;
+   *   age: number;
+   * }
+   * const byName = ordering(byString).on<Person>(p => p.name).compare;
+   * const byAge = ordering(byNumber).on<Person>(p => p.age).compare;
+   * ```
+   */
+  on<T>(f: (data: T) => Element): Ordering<T> {
+    return ordering<T>(keyed(f, this.compare));
   }
 }
 
 /**
- * An `Ordering<T>` provides convenience methods for using an existing
- * comparator or deriving another comparator out of an existing one.
+ * Wraps the given comparator in an {@linkcode Ordering}.
  */
-export interface Ordering<T> {
-  /**
-   * The underlying comparator function that drives this ordering.
-   */
-  compare: Comparator<T>;
-
-  /**
-   * Returns an ordering that is a reversal of the current one.
-   */
-  reversed(): Ordering<T>;
-
-  /**
-   * Derives an `Ordering<U>` out of the current `Ordering<T>` given a
-   * transformation function from `U` to `T`.
-   */
-  on<U>(f: (data: U) => T): Ordering<U>;
-}
-
-/**
- * Constructs an Ordering given a comparator.
- */
-export function ordering<T>(compare: Comparator<T>): Ordering<T> {
-  return new Ordering_<T>(compare);
+export function ordering<Element>(
+  compare: Comparator<Element>,
+): Ordering<Element> {
+  return new Ordering<Element>(compare);
 }
