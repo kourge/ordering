@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import {Comparator, reversed, keyed} from './comparator';
+import {Comparator, reversed, join, keyed} from './comparator';
 
 /**
  * An ordering is a wrapper around a {@linkcode Comparator} that makes it easy
@@ -47,6 +47,25 @@ export class Ordering<Element> {
     return result;
   }
 
+  /**
+   * Joins the given comparators or orderings into a new ordering so that when
+   * this ordering's comparison results in an equality, the next one is used as
+   * a fallback.
+   *
+   * @example
+   * ```ts
+   * const orderingByName = ordering(byString).on<Person>(p => p.name);
+   * const orderingByAge = ordering(byNumber).on<Person>(p => p.age);
+   *
+   * const orderingByNameThenByAge = orderingByName.join(orderingByAge);
+   * ```
+   */
+  join(
+    ...comparatorsOrOrderings: Array<Comparator<Element> | Ordering<Element>>
+  ): Ordering<Element> {
+    if (comparatorsOrOrderings.length === 0) {
+      return this;
+    }
 
     const comparators = comparatorsOrOrderings.map(toComparator);
     return ordering<Element>(join(this.compare, ...comparators));
@@ -82,4 +101,10 @@ export function ordering<Element>(
   compare: Comparator<Element>,
 ): Ordering<Element> {
   return new Ordering<Element>(compare);
+}
+
+function toComparator<Element>(
+  f: Ordering<Element> | Comparator<Element>,
+): Comparator<Element> {
+  return 'compare' in f ? f.compare : f;
 }

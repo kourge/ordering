@@ -10,4 +10,13 @@ describe('Ordering', () => {
       expect(doubleReversed.compare).toBe(numberOrdering.compare);
     });
   });
+
+  describe('join', () => {
+    it('returns this if given nothing to join', () => {
+      const numberOrdering = ordering(byNumber);
+      const result = numberOrdering.join();
+
+      expect(result).toBe(numberOrdering);
+    });
+  });
 });
