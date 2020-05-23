@@ -1,4 +1,11 @@
-import {byBoolean, byCodeUnit, byDate, byNumber, byString} from './comparators';
+import {
+  byBoolean,
+  byCodeUnit,
+  byDate,
+  byNumber,
+  byString,
+  byStringWithoutCaseSensitivity,
+} from './comparators';
 
 describe('byNumber', () => {
   it('compares by numeric value', () => {
@@ -34,11 +41,16 @@ describe('byString', () => {
 
     expect(result).toEqual(expected);
   });
+});
 
-  describe('caseInsensitive', () => {
-    it('defines equality', () => {
-      expect(byString.caseInsensitive('a', 'A')).toBe(0);
-    });
+describe('byStringWithoutCaseSensitivity', () => {
+  it('compares by lexicographic order', () => {
+    expect(byString('a', 'B')).toBeLessThan(0);
+    expect(byString('B', 'a')).toBeGreaterThan(0);
+  });
+
+  it('defines equality', () => {
+    expect(byStringWithoutCaseSensitivity('a', 'A')).toBe(0);
   });
 });
 
