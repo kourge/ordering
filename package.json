@@ -57,7 +57,8 @@
     "singleQuote": true,
     "trailingComma": "all",
     "bracketSpacing": false,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "proseWrap": "always"
   },
   "jest": {
     "preset": "ts-jest"
