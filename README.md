@@ -14,6 +14,12 @@ This library provides a set of ready-to-use comparators for sorting most
 built-in JavaScript types, as well as a variety of utilities to make more
 comparators.
 
+## Installation
+
+```
+npm install @kourge/ordering
+```
+
 ## Broad Examples
 
 Here is a quick overview of what it's like to use `ordering`.
