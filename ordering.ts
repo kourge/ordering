@@ -1,5 +1,5 @@
 /**
- * Defines the {@linkcode Ordering} class that wraps around a
+ * Defines the {@linkcode Ordering} interface that wraps around a
  * {@linkcode Comparator} and provides convenience methods.
  * @packageDocumentation
  */
@@ -11,41 +11,39 @@ import {Comparator, reversed, join, keyed} from './comparator';
  * to create more comparators based on the wrapped one.
  *
  * To make an ordering, call {@linkcode ordering} with a comparator. To
- * retrieve the comparator from an ordering, access its `compare` property.
+ * retrieve the wrapped comparator from an ordering, access its `compare`
+ * property.
+ *
+ * An ordering can also be directly passed as a comparator to an array's `sort`
+ * method, without any unwrapping.
  *
  * @example
  * ```ts
- * const numericOrdering = ordering(byNumber);
- * numericOrdering.compare === byNumber;
+ * const orderingByNumber = ordering(byNumber);
+ * orderingByNumber.compare === byNumber;
+ *
+ * const a = [1, 10, 3, 8, 5, 6, 7, 4, 9, 2, 0];
+ * a.sort(orderingByNumber);
  * ```
  */
-export class Ordering<Element> {
-  constructor(
-    /**
-     * The underlying comparator that drives this ordering.
-     */
-    public compare: Comparator<Element>,
-  ) {}
+export interface Ordering<Element> extends Comparator<Element> {
+  /**
+   * The underlying comparator that drives this ordering.
+   */
+  compare: Comparator<Element>;
 
   /**
    * Returns an ordering that is a reversal of the current one.
    *
    * @example
    * ```ts
-   * const byNumberDescending = ordering(byNumber).reverse().compare;
+   * const byNumberDescending = ordering(byNumber).reverse();
    *
    * const a = [1, 10, 3, 8, 5, 6, 7, 4, 9, 2, 0];
    * a.sort(byNumberDescending);
    * ```
    */
-  reversed(): Ordering<Element> {
-    const result = ordering<Element>(reversed(this.compare));
-
-    // Cache the current ordering as the reverse of the reversed ordering.
-    result.reversed = () => this;
-
-    return result;
-  }
+  reversed(): Ordering<Element>;
 
   /**
    * Joins the given comparators or orderings into a new ordering so that when
@@ -62,14 +60,7 @@ export class Ordering<Element> {
    */
   join(
     ...comparatorsOrOrderings: Array<Comparator<Element> | Ordering<Element>>
-  ): Ordering<Element> {
-    if (comparatorsOrOrderings.length === 0) {
-      return this;
-    }
-
-    const comparators = comparatorsOrOrderings.map(toComparator);
-    return ordering<Element>(join(this.compare, ...comparators));
-  }
+  ): Ordering<Element>;
 
   /**
    * Derives an `Ordering<T>` out of the current `Ordering<Element>` given a
@@ -85,14 +76,42 @@ export class Ordering<Element> {
    *   name: string;
    *   age: number;
    * }
-   * const byName = ordering(byString).on<Person>(p => p.name).compare;
-   * const byAge = ordering(byNumber).on<Person>(p => p.age).compare;
+   * const byName = ordering(byString).on<Person>(p => p.name);
+   * const byAge = ordering(byNumber).on<Person>(p => p.age);
    * ```
    */
-  on<T>(f: (data: T) => Element): Ordering<T> {
-    return ordering<T>(keyed(f, this.compare));
-  }
+  on<T>(f: (data: T) => Element): Ordering<T>;
 }
+
+const methods = {
+  reversed<Element>(this: Ordering<Element>): Ordering<Element> {
+    const result = ordering<Element>(reversed(this.compare));
+
+    // Cache the current ordering as the reverse of the reversed ordering.
+    result.reversed = () => this;
+
+    return result;
+  },
+
+  join<Element>(
+    this: Ordering<Element>,
+    ...comparatorsOrOrderings: Array<Comparator<Element> | Ordering<Element>>
+  ): Ordering<Element> {
+    if (comparatorsOrOrderings.length === 0) {
+      return this;
+    }
+
+    const comparators = comparatorsOrOrderings.map(toComparator);
+    return ordering<Element>(join(this.compare, ...comparators));
+  },
+
+  on<Element, T>(
+    this: Ordering<Element>,
+    f: (data: T) => Element,
+  ): Ordering<T> {
+    return ordering<T>(keyed(f, this.compare));
+  },
+};
 
 /**
  * Wraps the given comparator in an {@linkcode Ordering}.
@@ -100,11 +119,36 @@ export class Ordering<Element> {
 export function ordering<Element>(
   compare: Comparator<Element>,
 ): Ordering<Element> {
-  return new Ordering<Element>(compare);
+  // Initialize main object.
+  const f = (function (a: Element, b: Element): number {
+    // Forward to the underlying comparator.
+    return f.compare(a, b);
+  } as any) as Ordering<Element>;
+
+  // Attach the underlying comparator.
+  f.compare = compare;
+
+  // Name it after the comparator it wraps.
+  Object.defineProperty?.(f, 'name', {
+    get: () => `ordering(${nameOfFunction(f.compare)})`,
+  });
+
+  // Copy methods over.
+  for (const methodName of Object.keys(methods) as Array<
+    keyof typeof methods
+  >) {
+    f[methodName] = methods[methodName] as any;
+  }
+
+  return f;
 }
 
 function toComparator<Element>(
   f: Ordering<Element> | Comparator<Element>,
 ): Comparator<Element> {
   return 'compare' in f ? f.compare : f;
+}
+
+function nameOfFunction(f: Function & {displayName?: string}): string {
+  return f?.displayName ?? f.name;
 }
