@@ -1,6 +1,6 @@
-[@kourge/ordering - v1.0.1](README.md)
+[@kourge/ordering - v2.0.0-rc.0](README.md)
 
-# @kourge/ordering - v1.0.1
+# @kourge/ordering - v2.0.0-rc.0
 
 ## Index
 

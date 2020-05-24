@@ -1,4 +1,4 @@
-[@kourge/ordering - v1.0.1](../README.md) › ["comparators"](_comparators_.md)
+[@kourge/ordering - v2.0.0-rc.0](../README.md) › ["comparators"](_comparators_.md)
 
 # Module: "comparators"
 

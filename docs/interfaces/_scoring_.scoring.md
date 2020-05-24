@@ -1,4 +1,4 @@
-[@kourge/ordering - v1.0.1](../README.md) › ["scoring"](../modules/_scoring_.md) › [Scoring](_scoring_.scoring.md)
+[@kourge/ordering - v2.0.0-rc.0](../README.md) › ["scoring"](../modules/_scoring_.md) › [Scoring](_scoring_.scoring.md)
 
 # Interface: Scoring <**Element**>
 
